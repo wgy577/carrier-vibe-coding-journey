@@ -12,6 +12,7 @@ const forbiddenText = [
   "appgprj_",
   "initialtraject/M7J5.mat",
   "systemtraject/J4M5.mat",
+  "332.8,52.33",
 ];
 
 const failures = [];

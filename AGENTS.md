@@ -6,6 +6,8 @@ implementation.
 ## Public boundary
 
 - Only the historical v1 and v2 source snapshots may be committed.
+- v1 must retain the generic public deck polygon; never restore its original
+  project-derived coordinate list.
 - Never add the final 3D Demo source, real deck export, MATLAB trajectories,
   GLB/EXR runtime assets, API keys, `.env` files, or Sites hosting metadata.
 - The final Demo may appear only as a screenshot, public URL, and metadata API.
