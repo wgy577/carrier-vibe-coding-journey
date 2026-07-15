@@ -1,0 +1,33 @@
+name: Validate public snapshots
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/check-open-source-boundary.mjs
+
+  build:
+    strategy:
+      matrix:
+        version: [v1-initial, v2-compact]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: versions/${{ matrix.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: versions/${{ matrix.version }}/package-lock.json
+      - run: npm ci
+      - run: npm test
