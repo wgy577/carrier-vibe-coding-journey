@@ -1,414 +1,410 @@
 <div align="center">
 
-# From Flat Prototype to Carrier Operations
+# From Prompt Failure to Carrier Operations
 
-## 一次从 One-shot 失败、Prompt 编译到多层 Agent Harness 的 Vibe Coding 实验
+### 一天内，把“勉强能动”的 Prompt 原型迭代成可公开体验的 3D 航母演示
 
-**Created and directed by Guangyu Wu (WGY)**
+**GPT × Claude Code × Human Review**
 
-[最终在线 Demo](https://wgy-carrier-operations-demo.wgy577-sortie.workers.dev/) ·
-[Demo API](https://wgy-carrier-operations-demo.wgy577-sortie.workers.dev/api/demo) ·
-[开源 v1](versions/v1-initial/) ·
-[开源 v2](versions/v2-compact/) ·
-[开源边界](OPEN_SOURCE_BOUNDARY.md)
+![Build](https://img.shields.io/badge/Build-2026--07--14-183B56?style=flat-square)
+![Duration](https://img.shields.io/badge/Duration-One_Day-C68A3A?style=flat-square)
+![Method](https://img.shields.io/badge/Method-Agent_Harness-2F6B5F?style=flat-square)
+![Final](https://img.shields.io/badge/Final_Source-Private-5B526A?style=flat-square)
+
+[**体验最终 Demo**](https://wgy-carrier-operations-demo.wgy577-sortie.workers.dev/) ·
+[**打开 v1 原始 Demo**](https://carrier-prompt-only-v1-wgy.wgy577-sortie.workers.dev) ·
+[**打开 v2 原始 Demo**](https://carrier-prompt-only-v2-wgy.wgy577-sortie.workers.dev) ·
+[**Demo API**](https://wgy-carrier-operations-demo.wgy577-sortie.workers.dev/api/demo)
 
 </div>
 
 ---
 
-## 简历版摘要
+> **这不是一个“我写出了一条神奇 Prompt”的故事。** 这是一次在 **2026 年 7 月 14 日，一个自然日内**完成的 Vibe Coding 实验：最初两次直接生成都很差；随后 GPT 把人的观看反馈转译成可执行规格，Claude Code 读取项目、实现和验证，Harness 则逐步把上下文、坐标、对象、动画、性能和发布边界固定下来。
 
-我用自然语言持续导演 Codex，把一个“能动但不像航母”的一次性原型，迭代成具有完整舰体、真实资产、轨迹驱动、状态隔离、海天环境、性能保护和公开接口的 3D 航母演示。
+## 先看结果：从最差到最终版
 
-项目真正的成果不是某一条“神奇 Prompt”，而是一套由 **15 层 Harness、6 个隔离边界和 5 条反馈回路**组成的生成式软件工作流：人的视觉判断负责方向，GPT 负责把反馈编译成规格，Codex 负责仓库级实现与验证，Claude Code 负责快速探索，自动测试和发布门禁负责阻止系统退化。
+| 阶段 | 当时采用的方法 | 得到的结果 | 直接体验 | 源码 |
+|:--|:--|:--|:--:|:--:|
+| 00 | 一次性 Prompt 生成 GIF / MP4 | 有弹射语义，但构图、模型和空间关系都很抽象 | [GIF](media/01-one-shot-carrier-launch.gif) · [MP4](media/01-one-shot-carrier-launch.mp4) | — |
+| 00.5 | Claude Code 快速 2D 尝试 | 叙事更统一，但仍不是可观察、可交互的三维系统 | [GIF](media/02-claude-code-catapult.gif) | — |
+| 01 | 原始 Prompt 直接生成 3D 页面 | 能运行，但舰体、飞机和代码结构都很粗糙 | [**Live v1**](https://carrier-prompt-only-v1-wgy.wgy577-sortie.workers.dev) | [原始快照](versions/v1-initial/) |
+| 02 | 更长 Prompt 再生成一次 | 有组件和状态机，但“Prompt 更长”仍没有带来可信场景 | [**Live v2**](https://carrier-prompt-only-v2-wgy.wgy577-sortie.workers.dev) | [原始快照](versions/v2-compact/) |
+| Final | GPT–Claude Code 闭环 + 多层 Harness | 完整航母、真实资产、轨迹驱动、连续攀升、海天环境与性能保护 | [**Live Final**](https://wgy-carrier-operations-demo.wgy577-sortie.workers.dev/) · [API](https://wgy-carrier-operations-demo.wgy577-sortie.workers.dev/api/demo) | Private |
 
-> 稍微夸张但准确地说：第一版是在浏览器里“画了一艘会动的船”，最终版是在数据、对象所有权、视觉验收、热预算和隐私边界共同约束下运行的微型数字场景系统。
+[![最终舰载机离舰持续攀升画面](media/final-private-demo.png)](https://wgy-carrier-operations-demo.wgy577-sortie.workers.dev/)
 
-## 成果地图
+最终版公开运行，但实现保持私有。读者可以实际操作航母场景、查看单架舰载机工序 1–8、单独出动、持续攀升、亮度和甲板机数量档位，也可以读取公开接口；真实甲板生成逻辑、MATLAB 轨迹、GLB/EXR 资产与最终源代码不进入本仓库。
 
-| 阶段 | 结果 | 公开内容 | 入口 |
-|---|---|---|---|
-| 0 | One-shot GIF / MP4 | 媒体与早期实验结果 | [GIF](media/01-one-shot-carrier-launch.gif) · [MP4](media/01-one-shot-carrier-launch.mp4) |
-| 0.5 | Claude Code 2D 原型 | 动画结果 | [查看 GIF](media/02-claude-code-catapult.gif) |
-| 1 | ChatGPT Sites 初始 3D Demo | 完整历史源码 | [v1 源码](versions/v1-initial/) |
-| 2 | 紧凑、组件化 3D Demo | 完整历史源码 | [v2 源码](versions/v2-compact/) |
-| Final | 数据与真实资产驱动的完整演示 | **源码闭源，仅提供界面** | [在线 Demo](https://wgy-carrier-operations-demo.wgy577-sortie.workers.dev/) · [API](https://wgy-carrier-operations-demo.wgy577-sortie.workers.dev/api/demo) |
+## 一天是怎样完成的？
 
-## 最终版本：公开运行，私有实现
+**时间戳：2026-07-14（Asia/Shanghai） · 从第一份失败输出到最终可发布版本，全部发生在同一个自然日。**
 
-[![最终舰载机离舰攀升画面](media/final-private-demo.png)](https://wgy-carrier-operations-demo.wgy577-sortie.workers.dev/)
+| 一日阶段 | 发生了什么 | Harness 成熟度 |
+|:--|:--|:--|
+| 上午 · 快速试错 | 直接把目标交给模型，生成 GIF、2D 动画和最早 3D 页面；结果“能动”，但明显不像真实航母场景 | `L0` 几乎没有 Harness |
+| 中段 · 连续否决 | 人只做观看、指出“平板漂在海上”“飞机不像飞机”“攀升拐直角”等问题；GPT 将反馈改写成几何、镜头、状态与禁止项 | `L1–L2` 规格与上下文 Harness |
+| 下午 · 项目落地 | Claude Code 读取现有 Python/甲板/轨迹语义，建立坐标契约、CarrierGroup、真实资产装载和对象所有权 | `L3–L4` 数据、对象与动画 Harness |
+| 晚间 · 环境与性能 | 海天环境、云层、尾迹、连续攀升、Mac 发热、机数档位、停止渲染逐项进入回归约束 | `L5` 视觉与热预算 Harness |
+| 发布前 · 边界收口 | 最终版本闭源；v1/v2 原样开源并部署；敏感文件扫描、构建、测试与发布入口全部验证 | `L6` Privacy / Release Harness |
 
-最终版展示单架舰载机从甲板保障、牵引、准备、进入弹射器到离舰持续攀升的完整流程，并提供镜头旋转、亮度调节、甲板机数量档位、独立出动和停止渲染等交互。
-
-- **Demo：** <https://wgy-carrier-operations-demo.wgy577-sortie.workers.dev/>
-- **接口：** [`GET /api/demo`](https://wgy-carrier-operations-demo.wgy577-sortie.workers.dev/api/demo)
-- **源码状态：** Private
-- **不公开内容：** 最终源码、真实甲板导出、Python 生成逻辑、MATLAB 轨迹与转换结果、GLB/EXR 运行资产。
-
-这一边界不是“缺少开源文件”，而是作品设计的一部分：读者可以体验结果、读取接口、审查早期演进，却不能从本仓库取得研究数据和最终实现。详细规则见 [OPEN_SOURCE_BOUNDARY.md](OPEN_SOURCE_BOUNDARY.md)。
-
----
-
-## v1 和 v2 到底是怎么来的？
-
-它们不是后来重新拼出来的示例，也没有为了开源而补测试、换模型或美化代码。两个目录分别与 ChatGPT Sites 私有源仓库的 `bb0ce0d`、`967375b` 文件树完全一致，连当时的目录结构和 Sites 元数据也原样保留。它们的价值就是证明：**只把 Prompt 直接交给模型，确实可以很快得到能运行的页面，但效果和工程质量都明显不够好。**
-
-### v1 · `bb0ce0d` · Build interactive carrier launch 3D demo
-
-[打开 v1 源码](versions/v1-initial/)
-
-v1 是第一次把“舰载机弹射”Prompt 直接变成可交互网页的版本。模型采用了最容易一次生成成功的策略：把航母、飞机、海面、镜头、UI 和动画全部塞进一个 `app/page.tsx`，用硬编码几何体快速拼出语义。
-
-它已经具备：
-
-- Three.js / React Three Fiber 场景；
-- 可变形动态海面；
-- 航母、代码飞机、舰岛和弹射轨道；
-- 全舰、弹射位、舰艏三个镜头；
-- OrbitControls、自动环绕、轨迹显示与弹射重播。
-
-它的问题也非常典型：单文件过重、舰体像盒子、飞机是二维轮廓挤出、运动状态隐含在渲染循环里，视觉上仍然粗糙。它证明了 Prompt-only 可以“把关键词都放进去”，却不能自动获得可信的大形体、运动和软件结构。
-
-### v2 · `967375b` · Refine compact carrier launch demo
-
-[打开 v2 源码](versions/v2-compact/) · [查看发射状态机](versions/v2-compact/lib/launch-machine.mjs)
-
-v2 来自第二轮更长、更具体的 Prompt。模型确实做出了一次结构化重构：
-
-- 从 188 行页面逻辑中拆出 `CarrierDemo`；
-- 独立建立 `Deck` 与 `Aircraft` 模型组件；
-- 飞机增加机身、机翼、座舱、尾翼、喷口和简化起落架；
-- 增加 `preparing → launching → climbing → finished` 状态机；
-- 用测试验证持续时间、状态顺序与最终攀升姿态；
-- 缩小场景范围，让用户第一眼更容易读懂“弹射出动”。
-
-但 v2 仍然是 Prompt 直接生成结果：航母依旧偏平、甲板是通用盒体、飞机和车辆仍是代码几何体，画面距离最终效果很远。它说明“把 Prompt 写得更长”能够改善结构，却不会自动补上真实资产、项目上下文、连续反馈和工程 Harness。
+这个时间线不是为了证明“一天能替代传统工程”，而是展示：当反馈链短、执行 Agent 能读取完整仓库、约束被逐层固化时，Vibe Coding 可以在一天内完成非常高密度的可见迭代。
 
 ---
 
-## 为什么直接给一条很长的 Prompt，仍然很难得到好 Demo？
-
-早期结果已经证明：Prompt 可以很快制造“语义正确”的画面——海、船、飞机、起飞都在——但它无法自动知道人的隐性标准。
-
-![One-shot 结果](media/01-one-shot-carrier-launch.gif)
-
-Claude Code 随后生成了构图更统一的 2D 动画。它非常适合快速验证故事节奏，却也暴露了二维原型无法承载空间观察、真实资产、轨迹和对象状态的问题。
-
-![Claude Code 2D 原型](media/02-claude-code-catapult.gif)
-
-One-shot 容易失败的原因并不是模型“不会写 Three.js”，而是缺少：
-
-1. **事实来源：** 哪些坐标、文件和资产才是权威输入；
-2. **识别标准：** 什么叫“像航母”，什么叫“飞机真的在攀升”；
-3. **对象所有权：** 谁控制主飞机，什么时候可以重置；
-4. **回归保护：** 修改天空时不能破坏牵引，优化海面时不能让 Mac 过热；
-5. **发布边界：** 什么可以展示，什么永远不能进入公共 Git 历史。
-
-所以我们不再追求“更长的万能 Prompt”，而是逐层搭建 Harness。
-
----
-
-## 15 层 Agent Harness
-
-这里的“15 层”是对完整工作过程的工程化复盘：并不是声称部署了 15 个独立服务，而是把原本混在聊天里的约束拆成 15 个可以检查、替换和回滚的责任层。
-
-| 层 | Harness | 实际作用 |
-|---:|---|---|
-| 01 | **Intent Layer** | 先定义远景叙事：完整航母、单架飞机、连续离舰攀升，而不是堆功能。 |
-| 02 | **Prompt Compiler** | 让 GPT 把“看着不对”转换成轮廓、镜头、状态、持续时间和禁止项。 |
-| 03 | **Repository Archaeology** | Codex 先检查现有 Python、MAT、前端结构和素材，避免重画已经存在的事实。 |
-| 04 | **Source-of-Truth Gate** | 坐标、设施和轨迹只允许来自指定源；禁止不同组件分别猜位置。 |
-| 05 | **Web Asset Due Diligence** | 联网检查候选模型的轮廓、面数、许可、文件大小和实时渲染风险。 |
-| 06 | **Coordinate Contract** | 固定二维到三维的唯一转换协议，所有对象共享同一世界坐标。 |
-| 07 | **Geometry Decomposition** | 舰体、甲板、舰岛、边缘和水线分块建模，任何一块可单独调整。 |
-| 08 | **Asset Normalization** | GLB 单次加载、包围盒归一化、统一前向轴、贴地，再安全 clone。 |
-| 09 | **Instance Ownership** | 主飞机、牵引飞机、演示牵引车和静态资产拥有明确身份，禁止下标混用。 |
-| 10 | **Animation State Machine** | 状态互斥、单一动画控制者、确定性 reset，消除重影与多循环争抢。 |
-| 11 | **Visual Critic Loop** | 每轮以截图和实际观看反馈检查舰体轮廓、镜头比例、云层高度与运动连续性。 |
-| 12 | **Environment Stack** | 天空、云、雾、长短波海面、航行尾迹分层处理，降低“一个 Shader 解决一切”的耦合。 |
-| 13 | **Performance & Thermal Gate** | FPS、DPR、甲板机数量、标签页暂停和 WebGL 释放共同组成热预算。 |
-| 14 | **Deterministic Verification** | 最终私有版本用构建、状态顺序、路径来源、对象分配和关键锚点测试锁定；公开 v1/v2 保持原样。 |
-| 15 | **Privacy & Release Gate** | 公共 v1/v2、私有最终版、运行接口三层分离；提交前自动扫描敏感资产。 |
-
-OpenAI 的 Codex 官方资料将 `AGENTS.md`、Skills、MCP、Memories 与 Subagents 描述为相互补充的定制层，并建议用 hooks、linters 和类型检查器固化反复出现的反馈。[Codex Customization](https://learn.chatgpt.com/docs/customization/overview)
-
-OpenAI 也将现代 Agent Harness 描述为围绕工具、文件、记忆、审批、沙箱计算、guardrails 与 tracing 组织的可信运行层，并强调把 Harness 与计算环境的所有权显式分开。[Agent Harness / compute separation](https://developers.openai.com/cookbook/examples/agents_sdk/migrate-from-claude-agent-sdk/readme#why-migrate)
-
-本仓库把这种思路落实为真实文件：
-
-- [AGENTS.md](AGENTS.md) 保存持久发布规则；
-- [开源边界检查](scripts/check-open-source-boundary.mjs) 阻止敏感格式和私有标记进入 Git；
-- [GitHub Actions](.github/workflows/validate.yml) 验证开源边界并按原始能力构建 v1/v2；
-- v1 原始测试属于早期 Sites 模板，因此只验证构建；v2 原始状态机测试保持不动。
-
-## 6 个隔离边界
-
-1. **数据隔离：** 研究数据与展示代码不在同一个公开仓库。
-2. **版本隔离：** v1、v2 是只读历史快照；最终版在独立私有仓库演进。
-3. **对象隔离：** 静态飞机、牵引飞机和弹射飞机不共享控制权。
-4. **状态隔离：** 牵引、准备、弹射、攀升互斥，重置是显式转换。
-5. **渲染隔离：** 海面、云、舰体和 UI 可单独降级，不牵连核心流程。
-6. **发布隔离：** 公共仓库只保留早期源码；最终版只有 URL、API 和截图。
-
-## 5 条反馈回路
+## 真正的协作方式：两个模型执行，人只做方向判断
 
 ```text
-视觉反馈  → Prompt 规格 → 场景修正 → 新截图
-数据反馈  → 锚点测试   → 坐标修正 → 回归测试
-运动反馈  → 曲线约束   → 状态机   → 连续性验收
-性能反馈  → 热预算     → 降频/档位 → 设备实测
-发布反馈  → 边界扫描   → 隔离源码 → GitHub 验证
+                 少量目标输入 / 观看后的意见
+                            │
+                            ▼
+┌────────────────┐   编译意图与约束   ┌────────────────────┐
+│ Human reviewer │ ────────────────▶ │ GPT                │
+│ 看、否决、选择  │                   │ Prompt / Spec 编译器 │
+└───────▲────────┘                   └──────────┬─────────┘
+        │                                       │
+        │        截图、运行结果、失败现象        │ 可执行 Prompt、验收项
+        │                                       ▼
+        │                            ┌────────────────────┐
+        └────────────────────────────│ Claude Code        │
+                                     │ 仓库读取、实现、验证 │
+                                     └──────────┬─────────┘
+                                                │
+                                                ▼
+                                     Running Demo / Build
 ```
+
+### 分工不是传统的“人写需求、AI 补代码”
+
+| 角色 | 实际工作 |
+|:--|:--|
+| **GPT** | 与人对话，解释失败原因，把“感觉不对”编译成结构化 Prompt、坐标约束、状态机、视觉验收和禁止项；本 README 中的大多数长 Prompt 都来自这一步。 |
+| **Claude Code** | 主要工程执行者：读取已有项目，修改代码，建立模型与动画，搜索和筛选资产，运行构建，根据下一轮 Prompt 继续迭代。 |
+| **Human reviewer / WGY** | 提供最初目标和少量 Prompt 注入；实际观看每轮结果，决定保留、否决或继续；提出直观意见并负责最终验收与公开边界。 |
+| **Codex（后期）** | 对独立作品集仓库进行公开边界审计、历史快照核验、README 整理、CI 与发布入口维护；不是最终场景的主要实现者。 |
+
+换句话说，人没有手工设计 15 条完整技术 Prompt，也没有逐行实现 Three.js。人的核心价值是持续观看和做判断；GPT 负责把判断变成语言接口；Claude Code 负责把语言接口变成可运行系统。
 
 ---
 
-## 联网资产调研：不是“搜到模型就塞进去”
+## 为什么 v1 / v2 必须原样保留？
 
-最终私有版本的资产环节采用了候选搜索与许可尽调。Codex 不只检查“像不像”，还比较远景轮廓、三角面数量、文件体积、透明材质成本、前向轴和贴地难度。
+它们不是为了作品集重新制作的“假失败案例”。两个目录与早期 Sites 源仓库中的历史文件树一致，没有补模型、重写结构或偷偷美化。
 
-- 舰载机候选 [Shenyang J31 “Gyrfalcon”](https://sketchfab.com/3d-models/shenyang-j31-gyrfalcon-23dbff530e21491299ac67bbab42b553) 具有清楚的飞机轮廓，页面标注约 51.6k triangles、CC Attribution。
-- 牵引车候选 [pushback](https://sketchfab.com/3d-models/pushback-e15e6f76f18e4b02b7009df0fb018fc8) 页面标注约 11.2k triangles、CC Attribution。
-- 云资产 [Fluffy Cloud](https://sketchfab.com/3d-models/fluffy-cloud-2c887a28840f47cfae6b5dee0d11b842) 虽只有约 1.4k triangles，但作者明确提醒大量透明平面可能在桌面端仍然消耗很高——这直接解释了“模型不大，Mac 却发热”的现象。
-- 天空候选来自 [Poly Haven 的 Kloppenheim 07 Pure Sky](https://polyhaven.com/a/kloppenheim_07_puresky)，用于统一海上多云色调。
+### v1 · `bb0ce0d` · Prompt-only 初始 3D Demo
 
-这些最终运行资产**不随本仓库发布**。这里公开的是调研决策与方法，而不是资产文件和最终装配代码。
+[![Live v1](https://img.shields.io/badge/OPEN-LIVE_v1-2F6B5F?style=for-the-badge)](https://carrier-prompt-only-v1-wgy.wgy577-sortie.workers.dev)
+[![Source v1](https://img.shields.io/badge/VIEW-SOURCE_v1-4A6072?style=for-the-badge)](versions/v1-initial/)
+
+模型把航母、飞机、海面、镜头、UI 和动画集中到单个页面里，用硬编码几何体最快完成“关键词覆盖”。它有动态海面、三种镜头、OrbitControls、轨迹和弹射重播，却也有最典型的 One-shot 问题：舰体像盒子、飞机像挤出的图标、运动状态藏在渲染循环中。
+
+**它证明：直接 Prompt 可以很快得到能打开的网页，但“能运行”与“看起来可信”完全不是一回事。**
+
+### v2 · `967375b` · Prompt-only 紧凑版
+
+[![Live v2](https://img.shields.io/badge/OPEN-LIVE_v2-C68A3A?style=for-the-badge)](https://carrier-prompt-only-v2-wgy.wgy577-sortie.workers.dev)
+[![Source v2](https://img.shields.io/badge/VIEW-SOURCE_v2-4A6072?style=for-the-badge)](versions/v2-compact/)
+
+第二条更长 Prompt 让模型拆出 `CarrierDemo`、`Deck`、`Aircraft` 和 `preparing → launching → climbing → finished` 状态机，并增加了状态测试。结构更好了，但甲板仍然是通用盒体，飞机和车辆仍是代码几何体，环境和真实项目数据也没有进入系统。
+
+**它证明：Prompt 变长可以改善局部结构，却不会自动获得项目上下文、真实资产、反馈闭环和回归保护。**
+
+---
+
+## Harness 不是最后突然加上的名词，而是逐步长出来的
+
+早期 v1/v2 几乎没有 Harness。真正的跃迁发生在失败意见被一层层固化之后。
+
+```text
+L0  Direct Prompt
+    └─ 只描述想要什么，结果不可预测
+
+L1  Visual Contract
+    └─ “像航母 / 像飞机 / 连续攀升”变成可观察验收项
+
+L2  Context Grounding
+    └─ 先读仓库、Python、甲板语义和轨迹来源，再写代码
+
+L3  Data & Geometry Isolation
+    └─ 唯一坐标转换；Hull / Deck / Island 分块；不再各自猜位置
+
+L4  Object & State Ownership
+    └─ 弹射飞机、牵引飞机、静态资产拥有明确身份和唯一控制者
+
+L5  Visual / Performance Regression
+    └─ 截图复核、连续曲线、DPR/FPS、机数档位、标签页暂停和 WebGL 释放
+
+L6  Privacy / Release Gate
+    └─ 历史源码公开，最终源码私有；敏感格式扫描、CI、Demo 与 API 分离
+```
+
+### 最终形成的 15 个控制点
+
+<details>
+<summary><strong>展开查看完整 Harness（15 项）</strong></summary>
+
+| 组 | 控制点 | 防止的问题 |
+|:--|:--|:--|
+| Intent | 01. 远景叙事契约 | 功能很多，但第一眼看不懂 |
+| Intent | 02. GPT Prompt Compiler | 人的视觉意见无法落到代码 |
+| Context | 03. Repository Archaeology | 重画项目中已经存在的事实 |
+| Context | 04. Source-of-Truth Gate | 坐标、轨迹和设备位置被猜测 |
+| Context | 05. Asset Due Diligence | 模型许可、比例和渲染成本失控 |
+| Geometry | 06. Coordinate Contract | Python 二维坐标与 Three.js 世界错位 |
+| Geometry | 07. Geometry Decomposition | 舰体成为不可调的单一盒子 |
+| Assets | 08. GLB Normalization | 模型悬空、比例错乱、重复加载 |
+| Objects | 09. Instance Ownership | 飞机重影、下标混乱、重复实例 |
+| Motion | 10. State Machine | 多个动画同时争抢同一对象 |
+| Visual | 11. Screenshot Critic Loop | 构建通过但画面仍然错误 |
+| Environment | 12. Layered Sky / Sea / Wake | 天空拼接、海面假、特效过重 |
+| Performance | 13. Thermal Budget | Mac 发热、标签页后台持续渲染 |
+| Verification | 14. Build / Test / Anchor Checks | 后续修改破坏早先正确结果 |
+| Release | 15. Privacy Boundary | 最终资产与研究数据进入公开 Git 历史 |
+
+</details>
+
+OpenAI 对 Codex 定制层的说明也把持久指令、Skills、MCP 与自动检查视为相互补充的 Harness 组成部分，而不是依赖一条无限增长的 Prompt：[Codex Customization](https://learn.chatgpt.com/docs/customization/overview)。关于工具、文件、审批、guardrails 与运行环境边界的进一步说明见：[Agent Harness / compute separation](https://developers.openai.com/cookbook/examples/agents_sdk/migrate-from-claude-agent-sdk/readme#why-migrate)。
+
+本仓库中可以直接检查的发布 Harness：
+
+- [AGENTS.md](AGENTS.md)：历史快照和私有边界的持久规则；
+- [OPEN_SOURCE_BOUNDARY.md](OPEN_SOURCE_BOUNDARY.md)：公开 / 私有内容矩阵；
+- [scripts/check-open-source-boundary.mjs](scripts/check-open-source-boundary.mjs)：阻止研究数据、模型资产、环境文件和私有标记进入公共提交；
+- [.github/workflows/validate.yml](.github/workflows/validate.yml)：边界检查、v1 构建和 v2 原始测试。
+
+---
+
+## 关键工程转向
+
+### 1. 从“写一个航母”改为“读取项目事实”
+
+Claude Code 不再凭感觉重新画甲板，而是先理解既有 Python 甲板语义、区域、设备和轨迹来源；所有二维坐标经唯一契约进入 Three.js。最终数据和转换实现保持私有。
+
+### 2. 从“一个 Mesh”改为“可分离 CarrierGroup”
+
+舰体、甲板、舰岛、标线、静态资产与运动对象分别管理。这样修舰体不会改坏甲板，改天空不会触碰牵引状态。
+
+### 3. 从“模型能加载”改为“资产进入规范化管线”
+
+工程 Agent 对候选资产做了联网搜索和许可/性能核对：飞机与牵引车使用包围盒归一化、统一前向轴和最低点贴地，同一 GLB 只加载一次再 clone。环境资产也纳入透明材质和热预算评估。
+
+- [Shenyang J31 “Gyrfalcon”](https://sketchfab.com/3d-models/shenyang-j31-gyrfalcon-23dbff530e21491299ac67bbab42b553)
+- [pushback](https://sketchfab.com/3d-models/pushback-e15e6f76f18e4b02b7009df0fb018fc8)
+- [Fluffy Cloud](https://sketchfab.com/3d-models/fluffy-cloud-2c887a28840f47cfae6b5dee0d11b842)
+- [Kloppenheim 07 Pure Sky](https://polyhaven.com/a/kloppenheim_07_puresky)
+
+### 4. 从“播放动画”改为“对象所有权 + 状态机”
+
+弹射飞机、被牵引飞机、演示牵引车和静态资产不再靠临时下标控制。动画互斥、重置确定、飞机始终只有一个运动控制者，消除了重影与多个循环争抢。
+
+### 5. 从“视觉越多越好”改为“热预算也是功能”
+
+云模型、海面波动、静态飞机数量、DPR 和渲染频率都纳入性能门禁。最终 Demo 提供甲板机数量档位和“结束并停止”，页面隐藏时暂停，结束后释放 WebGL 资源。
 
 ---
 
 ## Prompt 演进档案
 
-以下保留了决定项目方向的 Prompt 轨迹。为可读性合并了重复路径、上传确认和很短的按钮调整，但没有删除任何关键转向。
+> 下列长 Prompt 不是人从头手写的技术文档。主要过程是：**人给出一句观看意见 → GPT 解释原因并生成结构化 Prompt → Claude Code 执行 → 人重新观看。** 为可读性，重复路径和上传确认已合并；关键转向完整保留。
 
 <details>
-<summary><strong>01 — 自由生成：先让舰载机飞起来</strong></summary>
+<summary><strong>01 · 自由生成：先让舰载机飞起来</strong></summary>
 
 ```text
-调用一个多模态模型或使用代码生成 GIF。
+调用多模态模型或使用代码生成 GIF。
 可以使用舰载机建模，甲板不一定俯视。
-表现弹射、加速、离舰和一小段攀升；加入天空、大海，自由发挥，做漂亮一点。
+表现弹射、加速、离舰和一小段攀升；加入天空和大海。
 ```
 
-结果快速、直观，但飞机、甲板和背景不属于同一视觉系统，也没有项目数据。
+结果快速，但飞机、甲板和背景不属于同一视觉系统。
 </details>
 
 <details>
-<summary><strong>02 — 从 GIF 转向可旋转的 3D 网页</strong></summary>
+<summary><strong>02 · 从 GIF 转向可旋转 3D 网页</strong></summary>
 
 ```text
-使用 Vite / Three.js 创建可公开部署的 3D Demo。
-低多边形、局部甲板、弹射器、主飞机、静止飞机、牵引车、阴天海面。
-出动包含准备、加速、离舰和 3~5 秒攀升，相机跟随。
-使用 loading / ready / preparing / launching / climbing / finished 状态。
+创建可公开部署的 Three.js 3D Demo。
+低多边形甲板、弹射器、主飞机、静止飞机、牵引车与阴天海面。
+出动包含准备、加速、离舰和 3~5 秒攀升；使用明确动画状态。
 ```
 
-这条 Prompt 产生了功能完整的方向，但视觉仍然像“平板放在水上”；这正是保留原始版本的意义。
+产生了完整方向，也产生了“平板漂在海上”的典型失败。
 </details>
 
 <details>
-<summary><strong>03 — v1：第一次完整交互场景</strong></summary>
+<summary><strong>03 · v1：第一次完整交互场景</strong></summary>
 
 ```text
-先做一个可运行的完整交互原型：
-航母、飞机、动态海面、弹射轨迹、三个镜头、OrbitControls 和重播。
-优先验证浏览器中的整体故事，不追求高模和复杂材质。
+先做可运行的完整原型：航母、飞机、动态海面、弹射轨迹、
+三个镜头、OrbitControls 和重播。优先验证整体故事。
 ```
 
-对应未经修改的公开快照：[v1 / bb0ce0d](versions/v1-initial/)。
+[Live](https://carrier-prompt-only-v1-wgy.wgy577-sortie.workers.dev) · [Source / bb0ce0d](versions/v1-initial/)
 </details>
 
 <details>
-<summary><strong>04 — v2：缩小场景并拆分状态</strong></summary>
+<summary><strong>04 · v2：缩小场景并拆分状态</strong></summary>
 
 ```text
-当前 Demo 太大、不够细节。重做为紧凑局部甲板场景。
-飞机必须能辨认机头、机身、机翼、尾翼、座舱、喷口和起落架。
-动画只播放一次，结束后重新演示；主飞机始终只有一个实例。
+当前 Demo 太大、不够细节。重做为紧凑局部甲板。
+飞机必须能辨认主要部件；动画只播放一次，主飞机只有一个实例。
 拆分场景、状态、模型与 UI，并运行构建和测试。
 ```
 
-对应未经修改的公开快照：[v2 / 967375b](versions/v2-compact/)。它比 v1 更有结构，但视觉效果依然明显不够好。
+[Live](https://carrier-prompt-only-v2-wgy.wgy577-sortie.workers.dev) · [Source / 967375b](versions/v2-compact/)
 </details>
 
 <details>
-<summary><strong>05 — 拒绝“海上平板”</strong></summary>
+<summary><strong>05 · 拒绝“海上平板”</strong></summary>
 
 ```text
-从中远距离必须一眼认出是航空母舰。
-不能只放甲板平面；补出舰首、舰尾、船舷、吃水线以上舰体厚度和侧置舰岛。
-默认镜头接近航母平行的斜侧视角，从前、侧、后都不能变成薄片。
+中远距离必须一眼认出是航空母舰。
+补出舰首、舰尾、船舷、吃水线以上体积与侧置舰岛。
+从前、侧、后旋转观看都不能变成薄片。
 ```
-
-“像航母”第一次被转换成可观察的几何验收标准。
 </details>
 
 <details>
-<summary><strong>06 — 数据优先：停止凭感觉设计</strong></summary>
+<summary><strong>06 · 停止凭感觉设计</strong></summary>
 
 ```text
 先读取已有 Python 甲板生成逻辑，建立唯一坐标转换。
-轮廓、区域、设备、舰岛与弹射器必须共享同一套世界坐标。
-不要重新随机摆放，不要把截图贴到矩形平面。
+轮廓、区域、设备、舰岛与弹射器共享同一套世界坐标。
+不要随机摆放，不要把截图贴到矩形平面。
 ```
-
-从这里开始，具体研究数据进入私有实现，不再包含在本公开仓库中。
 </details>
 
 <details>
-<summary><strong>07 — 分块建模完整舰体</strong></summary>
+<summary><strong>07 · 分块建模完整舰体</strong></summary>
 
 ```text
-以顶部轮廓为上层截面，构造中层、水线层和底层并连接。
-舰首逐渐收尖，舰尾相对平直，侧面向水线内收，底部继续收窄。
-CarrierGroup 内部分离 Hull / Deck / Island，禁止合成不可调整的单一网格。
+以顶部轮廓构造中层、水线层和底层截面。
+舰首收尖、舰尾相对平直、侧面向水线内收。
+CarrierGroup 内分离 Hull / Deck / Island。
 ```
-
-这建立了几何分块 Harness。
 </details>
 
 <details>
-<summary><strong>08 — 资产搜索、归一化与贴地</strong></summary>
+<summary><strong>08 · 资产搜索、归一化与贴地</strong></summary>
 
 ```text
-联网检查适合远景的舰载机、牵引车和环境资产，核对许可与渲染成本。
-GLB 只加载一次，再 clone 实例；使用 Box3 自动缩放和最低点贴地。
-模型前进方向只允许在根节点做一次固定修正。
+联网筛选远景可用的舰载机、牵引车和环境资产，核对许可与成本。
+GLB 只加载一次再 clone；使用 Box3 自动缩放和最低点贴地。
+前进方向只在根节点做一次固定修正。
 ```
-
-最终资产与装配代码保持私有，本仓库只记录选择方法与来源页面。
 </details>
 
 <details>
-<summary><strong>09 — 真实轨迹与对象所有权</strong></summary>
+<summary><strong>09 · 真实轨迹与对象所有权</strong></summary>
 
 ```text
-浏览器不能直接使用 MATLAB 数据时，先转换为前端路径点。
-主飞机、被牵引飞机、移动牵引车和牵引演示车必须使用明确命名。
-任何时刻只有一个动画拥有对象控制权；重置恢复位置、朝向和状态。
+MATLAB 数据先转换为前端路径点，但轨迹来源不能替换。
+主飞机、被牵引飞机和两辆演示牵引车使用明确命名。
+任何时刻只有一个动画拥有对象控制权。
 ```
-
-轨迹文件、转换结果与实现全部位于最终私有项目。
 </details>
 
 <details>
-<summary><strong>10 — 单架飞机工序 1~8</strong></summary>
+<summary><strong>10 · 单架飞机工序 1–8</strong></summary>
 
 ```text
-不要做 20 架同时调度，只演示一架飞机完整经历工序 1~8。
-包括牵引车接近、挂接、牵引、准备、进入弹射器、弹射和持续攀升。
-同一架飞机不能同时被多个动画控制，不得重影、复制或瞬移。
+不做 20 架同时调度，只演示一架飞机完整经历工序 1–8。
+包括牵引车接近、挂接、牵引、准备、弹射和持续攀升。
+同一架飞机不得被多个动画同时控制。
 ```
-
-用一条可信故事线替代了数量更大但难读的演示。
 </details>
 
 <details>
-<summary><strong>11 — 环境从“特效”回到空气感</strong></summary>
+<summary><strong>11 · 环境从“特效”回到空气感</strong></summary>
 
 ```text
-丁达尔效应不能像舞台光柱；太阳藏在云后，只保留低对比空气透视。
-海面叠加长波和短波，远处更灰、更雾化，不能像镜子或暴风。
-天空统一、无接缝，上方厚云、地平线开阔，并让云层缓慢移动。
+丁达尔效应不能像舞台光柱；只保留低对比空气透视。
+海面叠加长波和短波；天空统一、无接缝，上方厚云、地平线开阔。
 ```
-
-环境被拆成天空、云、雾、海面和尾迹五个可独立调节的层。
 </details>
 
 <details>
-<summary><strong>12 — 连续飞行曲线</strong></summary>
+<summary><strong>12 · 连续飞行曲线</strong></summary>
 
 ```text
 飞机不能水平飞到甲板边缘后突然直角向上。
-位置、速度方向和俯仰角都要连续：向前加速的同时逐渐抬头，
-沿弧线攀升并继续飞向天际，画面保留海面、天空和部分航母参照。
+位置、速度方向和俯仰角都要连续，沿弧线攀升并继续飞向天际。
 ```
-
-视觉意见被转换成连续性约束。
 </details>
 
 <details>
-<summary><strong>13 — 航母航行与世界参考系</strong></summary>
+<summary><strong>13 · 航母航行与世界参考系</strong></summary>
 
 ```text
-航母要处于轻微航行状态：舰首浪花、侧边扰动和舰尾尾迹持续存在。
-海面、云层和航母产生一致的相对运动；出动动画不能取消尾迹。
+舰首浪花、侧边扰动和舰尾尾迹持续存在。
+海面、云层和航母产生一致相对运动；出动动画不能取消尾迹。
 ```
-
-场景从静态展台变成同一参考系里的运动世界。
 </details>
 
 <details>
-<summary><strong>14 — 热预算与主动停止</strong></summary>
+<summary><strong>14 · 热预算与主动停止</strong></summary>
 
 ```text
-Mac 运行时发热严重。限制 FPS 和 DPR，减少静态飞机，提供数量档位。
-页面隐藏时暂停；增加“结束并停止”，停止渲染循环并释放 WebGL 资源。
-README 提醒用户看完后停止 Demo，本地还要 Ctrl+C 关闭开发服务器。
+限制 FPS 和 DPR，减少静态飞机并提供数量档位。
+页面隐藏时暂停；增加“结束并停止”，释放 WebGL 资源。
+README 提醒用户结束 Demo，本地还要 Ctrl+C 关闭开发服务器。
 ```
-
-性能从“最后优化”升级为产品级验收项。
 </details>
 
 <details>
-<summary><strong>15 — 最终发布边界</strong></summary>
+<summary><strong>15 · 最终发布边界</strong></summary>
 
 ```text
-最终 Demo 和真实甲板保持闭源，只公开在线运行入口和 API。
-公开 v1 与 v2，展示从单文件原型到组件化状态机的过程。
-Vibe Coding 作品集使用独立 Git 仓库和独立 README。
-提交前自动阻止研究数据、最终资产、私有托管信息和绝对路径进入 Git。
+最终 Demo 和真实甲板保持闭源，只公开运行入口和 API。
+原样公开 v1/v2，展示 Prompt-only 失败到 Harness 系统的过程。
+提交前阻止研究数据、最终资产、私有托管信息和绝对路径进入 Git。
 ```
-
-这条 Prompt 最终变成了本仓库的 [AGENTS.md](AGENTS.md)、[边界文档](OPEN_SOURCE_BOUNDARY.md) 和 [自动检查](scripts/check-open-source-boundary.mjs)。
 </details>
 
 ---
 
-## 人与模型的分工
+## 最终版与开源边界
 
-- **Guangyu Wu / WGY：** 产品目标、研究边界、审美判断、失败诊断、最终验收和开源决策。
-- **GPT：** 将自然语言意见编译成分阶段 Prompt、状态约束、视觉标准和禁止项。
-- **Codex：** 仓库检查、联网尽调、代码实现、分块重构、构建测试、性能修正与发布隔离。
-- **Claude Code：** 快速生成代码原生 2D 原型，验证构图和叙事节奏。
-- **自动 Harness：** 在人不盯着每一行代码时，持续守住状态、构建、性能与隐私边界。
+- **最终 Demo：** <https://wgy-carrier-operations-demo.wgy577-sortie.workers.dev/>
+- **公开接口：** [`GET /api/demo`](https://wgy-carrier-operations-demo.wgy577-sortie.workers.dev/api/demo)
+- **最终源码：** Private
+- **保持私有：** 真实甲板导出、Python 生成逻辑、MATLAB 轨迹及转换结果、GLB/EXR 运行资产和最终装配代码
+- **公开内容：** 原始 v1/v2 源码、早期媒体、演进记录、CI 与发布边界检查
 
-这不是模型排行榜。真正有效的做法是让不同工具承担适合自己的工作，并让人始终掌握方向与验收权。
+详细规则见 [OPEN_SOURCE_BOUNDARY.md](OPEN_SOURCE_BOUNDARY.md)。
 
 ## 仓库结构
 
 ```text
 Carrier-Vibe-Coding-Journey/
-├── README.md                       # 完整作品集与 Prompt 演进
-├── AGENTS.md                       # Codex 的持久仓库规则
-├── OPEN_SOURCE_BOUNDARY.md         # 公开 / 私有边界
-├── scripts/
-│   └── check-open-source-boundary.mjs
-├── .github/workflows/validate.yml  # 边界 + v1/v2 构建测试
-├── media/                          # 早期结果与最终版截图
+├── README.md
+├── AGENTS.md
+├── OPEN_SOURCE_BOUNDARY.md
+├── scripts/check-open-source-boundary.mjs
+├── .github/workflows/validate.yml
+├── media/
 └── versions/
-    ├── v1-initial/                 # Sites 提交 bb0ce0d 的原始文件树
-    └── v2-compact/                 # Sites 提交 967375b 的原始文件树
+    ├── v1-initial/    # bb0ce0d 原始文件树
+    └── v2-compact/    # 967375b 原始文件树
 ```
 
-## 本地运行
+## 本地运行原始版本
 
 ```bash
-# 检查公共仓库没有越过发布边界
 node scripts/check-open-source-boundary.mjs
 
-# v1
 cd versions/v1-initial
 npm ci
 npm run build
 npm run dev
 
-# v2
 cd ../v2-compact
 npm ci
 npm test
 npm run dev
 ```
 
-两个版本都属于未经修饰的 Prompt-only 历史证据，效果差距是这个作品集要展示的核心内容。最终结果请直接访问[在线 Demo](https://wgy-carrier-operations-demo.wgy577-sortie.workers.dev/)。
+v1/v2 是未经美化的 Prompt-only 历史证据。请不要把它们误解为最终工程质量；它们的“差”，正是这份作品集需要保留的对照组。
 
 ## License
 
@@ -418,6 +414,8 @@ npm run dev
 
 <div align="center">
 
-**The first prompt produced a picture. The Harness produced a system.**
+**One day. Two collaborating models. One human review loop. A Harness that grew from failure.**
+
+Created by **Guangyu Wu (WGY)** · 2026-07-14
 
 </div>
