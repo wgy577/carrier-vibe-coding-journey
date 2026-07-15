@@ -17,7 +17,11 @@ jobs:
   build:
     strategy:
       matrix:
-        version: [v1-initial, v2-compact]
+        include:
+          - version: v1-initial
+            command: npm run build
+          - version: v2-compact
+            command: npm test
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -30,4 +34,4 @@ jobs:
           cache: npm
           cache-dependency-path: versions/${{ matrix.version }}/package-lock.json
       - run: npm ci
-      - run: npm test
+      - run: ${{ matrix.command }}

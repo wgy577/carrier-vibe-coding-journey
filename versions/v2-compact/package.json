@@ -1,9 +1,7 @@
 {
-  "name": "carrier-demo-v2-compact",
+  "name": "site-creator-vinext-starter",
   "version": "0.1.0",
   "private": true,
-  "author": "Guangyu Wu (WGY)",
-  "license": "MIT",
   "engines": {
     "node": ">=22.13.0"
   },

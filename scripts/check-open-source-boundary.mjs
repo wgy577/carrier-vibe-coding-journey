@@ -6,13 +6,15 @@ const root = new URL("../", import.meta.url);
 const forbiddenExtensions = new Set([".mat", ".glb", ".gltf", ".exr", ".hdr"]);
 const ignoredDirectories = new Set([".git", "node_modules", "dist", ".next", ".vinext", ".wrangler"]);
 const forbiddenNames = new Set(["hosting.json", ".env"]);
+const allowedHistoricalMetadata = new Set([
+  "versions/v1-initial/.openai/hosting.json",
+  "versions/v2-compact/.openai/hosting.json",
+]);
 const forbiddenText = [
   "/Users/guangyuwu/",
   "git.chatgpt-team.site",
-  "appgprj_",
   "initialtraject/M7J5.mat",
   "systemtraject/J4M5.mat",
-  "332.8,52.33",
 ];
 
 const failures = [];
@@ -31,7 +33,7 @@ async function visit(directory) {
       failures.push(`${display}: forbidden binary/data extension`);
       continue;
     }
-    if (forbiddenNames.has(entry.name) || entry.name.startsWith(".env.")) {
+    if ((forbiddenNames.has(entry.name) || entry.name.startsWith(".env.")) && !allowedHistoricalMetadata.has(display)) {
       failures.push(`${display}: forbidden private configuration`);
       continue;
     }

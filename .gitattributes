@@ -1,0 +1,4 @@
+# Historical snapshots are intentionally byte-for-byte preserved, including
+# whitespace produced by the original prompt-only generation.
+versions/v1-initial/** -whitespace
+versions/v2-compact/** -whitespace

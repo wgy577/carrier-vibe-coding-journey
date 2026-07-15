@@ -7,8 +7,10 @@ import * as THREE from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 
 const DECK: [number, number][] = [
-  [0,20],[16,8],[236,8],[258,20],[320,29],[320,55],
-  [268,62],[226,76],[166,70],[92,76],[24,68],[0,58]
+  [0,52.88],[0,43.34],[3.354,20.44],[4.529,13.76],[16.27,13.76],[16.27,0],
+  [237.18,0],[251.27,23.71],[332.12,28.62],[332.8,29.16],[332.8,52.33],
+  [251.94,56.96],[215.54,78.5],[189.54,78.5],[164.05,71],[98.96,71],
+  [89.23,76.59],[65.41,76.595],[58.87,75.09],[22.14,75.09],[22.14,56.01]
 ];
 
 const PLANE: [number, number][] = [
@@ -124,9 +126,7 @@ function Scene({view,autoRotate,waves,trajectory,launchKey}:{view:ViewName,autoR
     <Sky distance={900} sunPosition={[-140,80,-220]} turbidity={3} rayleigh={1.1}/>
     <ambientLight intensity={1.3}/><directionalLight position={[-120,180,-80]} intensity={2.4} castShadow shadow-mapSize={[2048,2048]} shadow-camera-left={-260} shadow-camera-right={260} shadow-camera-top={180} shadow-camera-bottom={-180}/>
     <Ocean active={waves}/><Carrier/><Aircraft active launchKey={launchKey}/>
-    {trajectory&&(
-      <Line points={[[92,2,63],[297,2,70],[345,18,76],[393,36,80]]} color="#53d9ff" lineWidth={2} dashed dashSize={3} gapSize={2}/>
-    )}
+    {trajectory&&<Line points={[[92,2,63],[297,2,70],[345,18,76],[393,36,80]]} color="#53d9ff" lineWidth={2} dashed dashSize={3} gapSize={2}/>} 
     <Sparkles count={40} scale={[560,22,280]} position={[165,2,38]} size={1.4} speed={.18} color="#dff7ff" opacity={.28}/>
     <CameraRig view={view} autoRotate={autoRotate}/>
   </>;

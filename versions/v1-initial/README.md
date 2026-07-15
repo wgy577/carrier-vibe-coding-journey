@@ -1,17 +1,11 @@
-# v1 — Initial interactive carrier Demo
+# Sortie Lab — Carrier Deck 3D Demo
 
-这是从 ChatGPT Sites 私有源仓库提交 `bb0ce0d` 导出的第一个可交互
-Three.js 原型。它采用代码几何体快速验证航母、动态海面、轨迹显示、
-多镜头和弹射动画能否在同一个网页场景中成立。
-
-公开快照移除了私有 Sites 项目绑定，并将项目甲板轮廓替换为通用低多边形
-航母轮廓；交互、镜头和动画结构保持这一阶段的原始实现。
+基于 `deck_update/video_viz.py` 中甲板边界、弹射器坐标和舰载机轮廓制作的交互式三维 Demo。
 
 ## 本地运行
 
 ```bash
-npm ci
-npm test
+npm install
 npm run dev
 ```
 

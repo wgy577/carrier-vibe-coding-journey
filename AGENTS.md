@@ -6,16 +6,20 @@ implementation.
 ## Public boundary
 
 - Only the historical v1 and v2 source snapshots may be committed.
-- v1 must retain the generic public deck polygon; never restore its original
-  project-derived coordinate list.
+- `versions/v1-initial` must remain byte-for-byte equivalent to private Sites
+  commit `bb0ce0d` (tree `130439ed91050cca8cb40f04242a45cea5531376`).
+- `versions/v2-compact` must remain byte-for-byte equivalent to private Sites
+  commit `967375b` (tree `3a71853b5482739c58c40949c134cf63626fc426`).
 - Never add the final 3D Demo source, real deck export, MATLAB trajectories,
-  GLB/EXR runtime assets, API keys, `.env` files, or Sites hosting metadata.
+  GLB/EXR runtime assets, API keys, `.env` files, or private repository URLs.
+- The two historical `.openai/hosting.json` files are part of the untouched
+  snapshots. They contain project metadata, not source credentials.
 - The final Demo may appear only as a screenshot, public URL, and metadata API.
 - Run `node scripts/check-open-source-boundary.mjs` before every commit.
 
 ## Verification
 
-- v1: `cd versions/v1-initial && npm ci && npm test`
+- v1: `cd versions/v1-initial && npm ci && npm run build`
 - v2: `cd versions/v2-compact && npm ci && npm test`
 - Documentation links and media paths must remain relative where possible.
 
