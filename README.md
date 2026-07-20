@@ -2,14 +2,13 @@
 
 # From Prompt Failure to Carrier Operations
 
-### 从失败 GIF 到完整 3D 航母：一天内完成的 LLM → Agent → Harness 实验
+### 从失败 GIF 到完整 3D 航母：LLM → Agent → Harness 项目
 
 **WGY 审核 → LLM + Prompt → Agent + Prompt → Harness → WGY 验收**
 
-![Build](https://img.shields.io/badge/Build-2026--07--14-183B56?style=flat-square)
-![Duration](https://img.shields.io/badge/Duration-One_Day-C68A3A?style=flat-square)
+![Problem](https://img.shields.io/badge/Problem-Carrier_Operations-17324D?style=flat-square)
 ![Method](https://img.shields.io/badge/Method-Agent_Harness-2F6B5F?style=flat-square)
-![Final](https://img.shields.io/badge/Final_Source-Private-5B526A?style=flat-square)
+![Final](https://img.shields.io/badge/Final-Source_Private-C47C3C?style=flat-square)
 
 [**最终 Demo**](https://wgy-carrier-operations-demo.wgy577-sortie.workers.dev/) ·
 [**原始 v1**](https://carrier-prompt-only-v1-wgy.wgy577-sortie.workers.dev) ·
@@ -26,7 +25,7 @@
 
 > **体验提示：** 点击上方截图即可进入最终在线 Demo，在浏览器中旋转视角、切换阴天/黄昏环境，并运行单机工序 1–8 或 20 架协同调度。离舰飞机会保持连续加速与远距离攀升，镜头始终保留航母作为画面焦点。
 
-这张图不是最开始生成出来的效果。它来自 **2026 年 7 月 14 日一个自然日内**的连续迭代，并在后续验收中接入与二维甲板动画一致的 `FJSP_J20M12h/100_502`、`ALL20=1`、`case 0` greedy 结果：完整航母舰体、项目甲板语义、真实飞机与牵引车资产、160 个工序、动态牵引起点、连续弹射攀升、海天环境、性能档位和停止渲染保护，都是在一次次失败审查后逐层加入的。
+这张图不是最开始生成出来的效果。它来自围绕项目目标开展的连续迭代，并在后续验收中接入与二维甲板动画一致的 `FJSP_J20M12h/100_502`、`ALL20=1`、`case 0` greedy 结果：完整航母舰体、项目甲板语义、真实飞机与牵引车资产、160 个工序、动态牵引起点、连续弹射攀升、海天环境、性能档位和停止渲染保护，都是在一次次失败审查后逐层加入的。
 
 > 项目的作者与最终决策者是 **Guangyu Wu (WGY)**。LLM 用于把短反馈扩展成 Prompt；Codex 作为执行 Agent 读取仓库、实现、测试和发布；Harness 负责把数据来源、对象边界、自动检查与人工验收固化成可重复流程。
 
@@ -266,14 +265,13 @@ Prompt 模板  →  文件/工具/状态边界  →  Build/Test/扫描  →  看
 
 - **Demo：** <https://wgy-carrier-operations-demo.wgy577-sortie.workers.dev/>
 - **接口：** [`GET /api/demo`](https://wgy-carrier-operations-demo.wgy577-sortie.workers.dev/api/demo)
-- **完成日期：** 2026-07-14（Asia/Shanghai）
-- **开发跨度：** 一个自然日
+- **项目形态：** 多阶段 Agent Harness 演进展示
 - **最终源码：** Private
 - **保持私有：** 真实甲板导出、Python 生成逻辑、MATLAB 轨迹及转换结果、GLB/EXR 运行资产和最终装配代码
 
 ---
 
-## 一日迭代时间线
+## 项目迭代路径
 
 | 阶段 | 结果 | Harness 成熟度 |
 |:--|:--|:--|
@@ -284,7 +282,7 @@ Prompt 模板  →  文件/工具/状态边界  →  Build/Test/扫描  →  看
 | **05 · Harness** | 修正云海、尾迹、连续攀升、发热和停止渲染 | `L5` Visual / Thermal Gate |
 | **发布 Gate** | v1/v2 原样公开，最终实现保持私有 | `L6` Privacy / Release Gate |
 
-这条时间线记录了在一个自然日内完成的高密度可见迭代，以及 WGY 审核、LLM、Codex 和 Harness 在各阶段承担的职责。
+这条路径记录了项目从早期原型到最终 Demo 的可见迭代，以及 WGY 审核、LLM、Codex 和 Harness 在各阶段承担的职责。
 
 ---
 
